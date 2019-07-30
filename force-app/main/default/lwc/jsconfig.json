@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "baseUrl": ".",
+        "paths": {
+            "c/activeList": [
+                "activeList/activeList.js"
+            ],
+            "c/connect": [
+                "connect/connect.js"
+            ],
+            "c/exampleApp": [
+                "exampleApp/exampleApp.js"
+            ],
+            "c/exampleAppService": [
+                "exampleAppService/exampleAppService.js"
+            ],
+            "c/provider": [
+                "provider/provider.js"
+            ],
+            "c/store": [
+                "store/store.js"
+            ]
+        }
+    },
+    "include": [
+        "**/*",
+        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+    ],
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    }
+}

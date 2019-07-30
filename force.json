@@ -1,0 +1,19 @@
+{
+  "apiVersion": "43.0",
+  "autoRefresh": false,
+  "browser": "Google Chrome Canary",
+  "checkForFileChanges": true,
+  "debugOnly": true,
+  "debugFilter": "USER_DEBUG|FATAL_ERROR",
+  "deployOptions": {
+    "checkOnly": false,
+    "ignoreWarnings": true
+  },
+  "overwritePackageXML": false,
+  "pollTimeout": 1200,
+  "showFilesOnOpen": true,
+  "showFilesOnOpenMax": 3,
+  "showTestCoverage": true,
+  "showTestLog": true,
+  "src": "src"
+}
