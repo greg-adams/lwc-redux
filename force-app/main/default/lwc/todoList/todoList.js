@@ -9,11 +9,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = {
-  addNewContact: actions.addNewContact
-}
+const mapDispatchToProps = (dispatch) => ({
+  addNewContact: () => dispatch(actions.addNewContact())
+})
 
-export default class ActiveList extends LightningElement {
+export default class TodoList extends LightningElement {
   @track contacts = [];
 
   connectedCallback() {

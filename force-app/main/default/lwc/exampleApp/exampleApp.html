@@ -1,7 +1,19 @@
 <template>
   <c-provider reducer={reducer}>
 
-    <c-active-list></c-active-list>
+    <template if:true={showActive}>
+      <c-active-list></c-active-list>
+    </template>
+
+    <hr>
+
+    <c-todo-list></c-todo-list>
+
+    <lightning-button onclick={disconnect}
+      label="Remove component"></lightning-button>
+
+    <lightning-button onclick={reconnect}
+      label="Reconnect component"></lightning-button>
 
   </c-provider>
 </template>

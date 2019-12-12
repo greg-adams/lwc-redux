@@ -13,7 +13,7 @@ const initialState = {
 
 
 
-export default function (state = initialState, action) {
+function uiReducer(state = initialState, action) {
   switch (action.type) {
 
     case 'ADD_CONTACT': {
@@ -33,4 +33,30 @@ export default function (state = initialState, action) {
       return state;
     }
   }
+}
+
+
+
+function otherReducer(state = {}, action) {
+  switch (action.type) {
+
+    case 'ADD_USER_ID': {
+      return {
+        ...state,
+        userId: Math.random()
+      };
+    }
+
+    default: {
+      return state;
+    }
+  }
+}
+
+
+
+
+export default {
+  ui: uiReducer,
+  other: otherReducer
 }
