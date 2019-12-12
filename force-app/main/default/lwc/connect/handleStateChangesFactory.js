@@ -1,5 +1,3 @@
-import shallowEqual from './shallowEqual';
-
 function strictEqual(a, b) {
   return a === b;
 }
@@ -9,7 +7,7 @@ export default function handleStateChangesFactory(store, {
   initMapDispatchToProps,
   initMergeProps,
   areStatesEqual = strictEqual,
-  areStatePropsEqual = shallowEqual,
+  unsubscribeKey,
   ...options
 } = {}) {
   const mapStateToProps = initMapStateToProps(store.dispatch, options);
@@ -42,20 +40,15 @@ export default function handleStateChangesFactory(store, {
 
   function handleNewState(ownProps) {
     const nextStateProps = mapStateToProps(state, ownProps);
-    const statePropsChanged = !areStatePropsEqual(nextStateProps, stateProps);
     stateProps = nextStateProps;
 
-    if (statePropsChanged) {
-      return mergeProps(stateProps, dispatchProps);
-    }
-
-    return mergedProps;
+    return mergeProps(stateProps, dispatchProps);
   }
 
   return function (component) {
     return function handleStateChanges() {
-      if (component && !component.template.isConnected && component.unsubscribe) {
-        component.unsubscribe();
+      if (component && !component.template.isConnected && component[unsubscribeKey]) {
+        component[unsubscribeKey]();
         return;
       }
 
@@ -64,12 +57,10 @@ export default function handleStateChangesFactory(store, {
         ? handleSubsequentCalls(nextState, component)
         : handleFirstCall(nextState, component);
 
-      if (!strictEqual(mergedProps, nextMergedProps)) {
-        mergedProps = nextMergedProps;
-        Object.entries(mergedProps).forEach(([key, value]) => {
-          component[key] = value;
-        });
-      }
+      mergedProps = nextMergedProps;
+      Object.entries(mergedProps).forEach(([key, value]) => {
+        component[key] = value;
+      });
     }
   }
 }

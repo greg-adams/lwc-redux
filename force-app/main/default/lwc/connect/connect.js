@@ -48,6 +48,7 @@ export function connect(
 
   return function (component) {
     const { subscribe } = getStore(storeKey);
+    const unsubscribeKey = Symbol('Unsubscribe');
 
     if (mapStateToProps || mapDispatchToProps) {
       const stateHandler = handleStateChangesFactory(
@@ -57,10 +58,11 @@ export function connect(
           initMapStateToProps,
           initMergeProps,
           displayName: component.template.host.tagName,
+          unsubscribeKey
         }
       )(component);
       stateHandler();
-      component.unsubscribe = subscribe(stateHandler);
+      component[unsubscribeKey] = subscribe(stateHandler);
     }
   }
 }
