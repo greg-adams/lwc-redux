@@ -11,10 +11,12 @@ export function initStore(reducers, {
   } = window.Redux;
   const ReduxThunk = window.ReduxThunk.default;
 
-  const rootReducer = combineReducers(reducers);
+  const rootReducer = typeof reducers === 'function' ?
+    reducers :
+    combineReducers(reducers);
 
   stores[storeKey] = createStore(
-    reducers,
+    rootReducer,
     applyMiddleware(ReduxThunk)
   );
 }
