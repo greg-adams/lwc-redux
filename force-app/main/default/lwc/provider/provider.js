@@ -8,22 +8,23 @@ import { initStore } from 'c/store';
 export default class Provider extends LightningElement {
   @api reducer = () => ({});
   @api storeKey;
+  @api store;
 
   @track resourceLoaded = false;
 
-  async connectedCallback() {
-    if (!this.resourceLoaded) {
-      await Promise.all([
-        loadScript(this, reduxResourceURL),
-        loadScript(this, reduxThunkResourceURL),
-      ]);
-
-      initStore(this.reducer, {
-        storeKey: this.storeKey || undefined
-      });
-
-      this.resourceLoaded = true;
-    }
+  connectedCallback() {
+    Promise.all([
+      loadScript(this, reduxResourceURL),
+      loadScript(this, reduxThunkResourceURL),
+    ])
+      .then(() => {
+        initStore(
+          this.store || null,
+          this.reducer, {
+          storeKey: this.storeKey || undefined
+        });
+        this.resourceLoaded = true;
+      })
   }
-}
 
+}

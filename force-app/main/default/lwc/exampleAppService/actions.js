@@ -1,9 +1,8 @@
-let count = 0;
+import * as types from './types';
 
-export const addNewContact = () => {
-  count++;
+export const addNewContact = (count) => {
   return {
-    type: 'ADD_CONTACT',
+    type: types.ADD_CONTACT,
     payload: count,
   }
 }

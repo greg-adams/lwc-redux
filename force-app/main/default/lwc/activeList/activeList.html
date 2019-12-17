@@ -1,7 +1,11 @@
 <template>
-  <button class="slds-button slds-button_brand" onclick={addNewContact}>Add Another</button>
+  <h1 data-header-id>{name}</h1>
+  <button class="slds-button slds-button_brand"
+    data-add-id
+    onclick={fireAddNewContact}>Add Another</button>
   <ul>
-    <template for:each={contacts} for:item="contact">
+    <template for:each={contacts}
+      for:item="contact">
       <li key={contact.id}>
         {contact.name}
       </li>

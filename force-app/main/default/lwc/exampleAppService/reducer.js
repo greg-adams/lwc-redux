@@ -1,4 +1,4 @@
-const initialState = {
+export const initialState = {
   contacts: [
     {
       id: '1',
@@ -21,7 +21,7 @@ function uiReducer(state = initialState, action) {
         ...state,
         contacts: [
           {
-            id: Math.random(),
+            id: `${action.payload}`,
             name: 'New Contact ' + action.payload,
           },
           ...state.contacts

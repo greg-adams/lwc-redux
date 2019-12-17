@@ -20,6 +20,12 @@
             ],
             "c/store": [
                 "store/store.js"
+            ],
+            "c/testUtils": [
+                "testUtils/testUtils.js"
+            ],
+            "c/todoList": [
+                "todoList/todoList.js"
             ]
         }
     },

@@ -23,7 +23,7 @@ export default function handleStateChangesFactory(store, {
   function handleFirstCall(firstState, ownProps) {
     state = firstState;
     stateProps = mapStateToProps(state, ownProps);
-    dispatchProps = mapDispatchToProps(store.dispatch);
+    dispatchProps = mapDispatchToProps(store.dispatch, ownProps);
     hasRunAtLeastOnce = true;
     return mergeProps(stateProps, dispatchProps);
   }

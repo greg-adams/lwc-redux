@@ -26,9 +26,8 @@ function match(arg, factories, name) {
 export function connect(
   mapStateToProps,
   mapDispatchToProps,
-  storeKey = 'redux'
+  storeKey = 'defaultRedux'
 ) {
-
   if (!getStore(storeKey)) {
     console.error('Store not properly initialized or component loaded before Provider.');
     return () => { };

@@ -1,0 +1,31 @@
+{
+  "name": "lwc-redux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "jest.config.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@lwc/jest-preset": "^4.1.0-224.1",
+    "@lwc/synthetic-shadow": "^1.1.1",
+    "@salesforce/sfdx-lwc-jest": "^0.6.2",
+    "jest": "^24.9.0",
+    "redux": "^4.0.4",
+    "redux-mock-store": "^1.5.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:unit": "jest",
+    "test:unit:watch": "jest --watch",
+    "test:unit:debug": "jest --debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greg-adams/lwc-redux.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/greg-adams/lwc-redux/issues"
+  },
+  "homepage": "https://github.com/greg-adams/lwc-redux#readme"
+}

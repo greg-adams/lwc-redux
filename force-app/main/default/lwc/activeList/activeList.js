@@ -1,4 +1,4 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import { connect } from 'c/connect';
 import { actions } from 'c/exampleAppService';
 
@@ -14,9 +14,14 @@ const mapDispatchToProps = {
 }
 
 export default class ActiveList extends LightningElement {
-  @track contacts = [];
+  @api name = '';
+  @api contacts = [];
 
   connectedCallback() {
     connect(mapStateToProps, mapDispatchToProps)(this);
+  }
+
+  fireAddNewContact() {
+    this.addNewContact(this.contacts.length + 1);
   }
 }

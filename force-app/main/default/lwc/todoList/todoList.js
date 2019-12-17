@@ -9,9 +9,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  addNewContact: () => dispatch(actions.addNewContact())
-})
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addNewContact: () => dispatch(actions.addNewContact(Math.ceil(Math.random() * 1000)))
+  }
+}
 
 export default class TodoList extends LightningElement {
   @track contacts = [];
