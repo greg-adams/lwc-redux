@@ -8,7 +8,7 @@ import { initStore } from 'c/store';
 export default class Provider extends LightningElement {
   @api reducer = () => ({});
   @api storeKey;
-  @api store;
+  @api store; // Test-only
 
   @track resourceLoaded = false;
 

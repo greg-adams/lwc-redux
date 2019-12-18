@@ -3,13 +3,13 @@ import { connect } from 'c/connect';
 import { actions } from 'c/exampleAppService';
 
 
-const mapStateToProps = (state) => {
+const mapState = (state) => {
   return {
     contacts: state.ui.contacts
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatch = (dispatch) => {
   return {
     addNewContact: () => dispatch(actions.addNewContact(Math.ceil(Math.random() * 1000)))
   }
@@ -19,6 +19,6 @@ export default class TodoList extends LightningElement {
   @track contacts = [];
 
   connectedCallback() {
-    connect(mapStateToProps, mapDispatchToProps)(this);
+    connect(mapState, mapDispatch)(this);
   }
 }

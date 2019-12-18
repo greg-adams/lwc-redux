@@ -30,3 +30,8 @@ export function initStore(testStore, reducers, {
 export function getStore(keyName = 'defaultRedux') {
   return stores[keyName] || null;
 }
+
+export default {
+  initStore,
+  getStore
+}

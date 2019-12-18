@@ -3,13 +3,13 @@ import { connect } from 'c/connect';
 import { actions } from 'c/exampleAppService';
 
 
-const mapStateToProps = (state) => {
+const mapState = (state) => {
   return {
     contacts: state.ui.contacts
   }
 }
 
-const mapDispatchToProps = {
+const mapDispatch = {
   addNewContact: actions.addNewContact
 }
 
@@ -18,7 +18,7 @@ export default class ActiveList extends LightningElement {
   @api contacts = [];
 
   connectedCallback() {
-    connect(mapStateToProps, mapDispatchToProps)(this);
+    connect(mapState, mapDispatch)(this);
   }
 
   fireAddNewContact() {

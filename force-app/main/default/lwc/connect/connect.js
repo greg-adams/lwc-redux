@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { getStore } from 'c/store';
 import mapStateToPropsFactories from './mapStateToProps';
 import mapDispatchToPropsFactories from './mapDispatchToProps';
@@ -29,6 +28,7 @@ export function connect(
   storeKey = 'defaultRedux'
 ) {
   if (!getStore(storeKey)) {
+    // eslint-disable-next-line no-console
     console.error('Store not properly initialized or component loaded before Provider.');
     return () => { };
   }
@@ -46,22 +46,32 @@ export function connect(
   const initMergeProps = () => defaultMergeProps;
 
   return function (component) {
-    const { subscribe } = getStore(storeKey);
+    const store = getStore(storeKey);
+    const subscribe = store.subscribe;
     const unsubscribeKey = Symbol('Unsubscribe');
 
     if (mapStateToProps || mapDispatchToProps) {
       const stateHandler = handleStateChangesFactory(
-        getStore(storeKey),
+        store,
         {
           initMapDispatchToProps,
           initMapStateToProps,
           initMergeProps,
-          displayName: component.template.host.tagName,
-          unsubscribeKey
+          // eslint-disable-next-line no-undef
+          displayName: process.env.NODE_ENV !== 'production' ? 'test-component' : component.template.host.tagName,
+          unsubscribeKey,
         }
       )(component);
       stateHandler();
-      component[unsubscribeKey] = subscribe(stateHandler);
+
+      // Only subscribe to store w/ mapState function
+      if (mapStateToProps) {
+        try {
+          component[unsubscribeKey] = subscribe(stateHandler);
+        } catch (e) {
+          // fail silently
+        }
+      }
     }
   }
 }

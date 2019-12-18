@@ -4,11 +4,7 @@ import ActiveList from 'c/activeList';
 import Provider from 'c/provider';
 
 import { actions } from 'c/exampleAppService';
-
-// Store Interactions
-// Mock store does not handle reducer interactions
-import configureStore from 'redux-mock-store';
-const mockStore = configureStore([]);
+import { createStore } from 'redux';
 
 jest.mock(
   'lightning/platformResourceLoader',
@@ -32,18 +28,21 @@ const initialState = {
   }
 }
 
+jest.mock('c/exampleAppService', () => {
+  return {
+    actions: {
+      addNewContact: jest.fn(() => ({ type: null }))
+    }
+  }
+});
+
 describe('c-active-list', () => {
-  let testStore;
-
-  beforeEach(() => {
-    testStore = mockStore(initialState);
-  });
-
   afterEach(() => {
     clearDOM();
   });
 
-  it('correctly dispatches action from Add button', () => {
+  it('correctly calls action creator', () => {
+    const testStore = createStore(() => ({ ...initialState }));
     const provider = createElement('c-provider', { is: Provider });
     provider.store = testStore;
     document.body.appendChild(provider);
@@ -55,12 +54,13 @@ describe('c-active-list', () => {
         aList.shadowRoot.querySelector('[data-add-id]').click();
       })
       .then(() => {
-        // Test store dispatch interactions
-        expect(provider.store.getActions()[0].type).toEqual(actions.addNewContact().type)
+        // Test action creator individually
+        expect(actions.addNewContact).toHaveBeenCalled();
       })
   });
 
   it('correctly handles non-store behavior', () => {
+    const testStore = createStore(() => ({ ...initialState }));
     const provider = createElement('c-provider', { is: Provider });
     provider.store = testStore;
     document.body.appendChild(provider);
@@ -79,8 +79,9 @@ describe('c-active-list', () => {
   });
 
 
-  // Redux only injects values, so we should test component for rendering
+  // Redux only injects values, so we should test component for rendering behavior
   it('correctly handles rendering store values', () => {
+    const testStore = createStore(() => ({ ...initialState }));
     const provider = createElement('c-provider', { is: Provider });
     provider.store = testStore;
     document.body.appendChild(provider);
@@ -90,10 +91,12 @@ describe('c-active-list', () => {
     return flushPromises()
       .then(() => provider.appendChild(aList))
       .then(() => {
-        aList.contacts = [{
-          name: 'Test',
-          id: '1',
-        }];
+        aList.contacts = [
+          {
+            name: 'Test',
+            id: '1',
+          }
+        ];
       })
       .then(() => {
         const items = aList.shadowRoot.querySelectorAll('li');
