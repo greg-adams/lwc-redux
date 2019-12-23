@@ -2,14 +2,11 @@ function strictEqual(a, b) {
   return a === b;
 }
 
-const anyTemplate = (cmp) => cmp.template || cmp.shadowRoot || null;
-
 export default function handleStateChangesFactory(store, {
   initMapStateToProps,
   initMapDispatchToProps,
   initMergeProps,
   areStatesEqual = strictEqual,
-  unsubscribeKey,
   ...options
 } = {}) {
   const mapStateToProps = initMapStateToProps(store.dispatch, options);
@@ -49,20 +46,6 @@ export default function handleStateChangesFactory(store, {
 
   return function (component) {
     return function handleStateChanges() {
-      // eslint-disable-next-line no-undef
-      const viewTemplate = process.env.NODE_ENV !== 'production' ?
-        component && anyTemplate(component) :
-        component && component.template;
-
-      if (viewTemplate && !viewTemplate.isConnected && component[unsubscribeKey]) {
-        try {
-          component[unsubscribeKey]();
-        } catch (e) {
-          // fail silently
-        }
-        return;
-      }
-
       const nextState = store.getState();
       const nextMergedProps = hasRunAtLeastOnce
         ? handleSubsequentCalls(nextState, component)

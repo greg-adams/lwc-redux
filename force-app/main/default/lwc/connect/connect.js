@@ -22,7 +22,7 @@ function match(arg, factories, name) {
   }
 }
 
-export function connect(
+function connect(
   mapStateToProps,
   mapDispatchToProps,
   storeKey = 'defaultRedux'
@@ -58,7 +58,7 @@ export function connect(
           initMapStateToProps,
           initMergeProps,
           // eslint-disable-next-line no-undef
-          displayName: process.env.NODE_ENV !== 'production' ? 'test-component' : component.template.host.tagName,
+          displayName: process.env.NODE_ENV === 'test' ? 'test-component' : component.template.host.tagName,
           unsubscribeKey,
         }
       )(component);
@@ -67,7 +67,33 @@ export function connect(
       // Only subscribe to store w/ mapState function
       if (mapStateToProps) {
         try {
+          component.Unsubscribe = unsubscribeKey;
           component[unsubscribeKey] = subscribe(stateHandler);
+        } catch (e) {
+          // fail silently
+        }
+      }
+    }
+  }
+}
+
+export const ConnectMixin = (mapState = null, mapDispatch = null) => Base => {
+  return class extends Base {
+    connectedCallback() {
+      connect(mapState, mapDispatch)(this);
+      if (super.connectedCallback) {
+        super.connectedCallback();
+      }
+    }
+
+    disconnectedCallback() {
+      if (super.disconnectedCallback) {
+        super.disconnectedCallback();
+      }
+
+      if (this.Unsubscribe) {
+        try {
+          this[this.Unsubscribe]();
         } catch (e) {
           // fail silently
         }

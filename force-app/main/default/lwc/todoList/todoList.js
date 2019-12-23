@@ -1,5 +1,5 @@
 import { LightningElement, track } from 'lwc';
-import { connect } from 'c/connect';
+import { ConnectMixin } from 'c/connect';
 import { actions } from 'c/exampleAppService';
 
 
@@ -15,10 +15,10 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default class TodoList extends LightningElement {
+class TodoList extends LightningElement {
   @track contacts = [];
 
-  connectedCallback() {
-    connect(mapState, mapDispatch)(this);
-  }
+
 }
+
+export default ConnectMixin(mapState, mapDispatch)(TodoList);

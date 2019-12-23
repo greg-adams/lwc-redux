@@ -8,7 +8,6 @@ import { initStore } from 'c/store';
 export default class Provider extends LightningElement {
   @api reducer = () => ({});
   @api storeKey;
-  @api store; // Test-only
 
   @track resourceLoaded = false;
 
@@ -19,10 +18,11 @@ export default class Provider extends LightningElement {
     ])
       .then(() => {
         initStore(
-          this.store || null,
-          this.reducer, {
-          storeKey: this.storeKey || undefined
-        });
+          this.reducer,
+          {
+            storeKey: this.storeKey || undefined
+          }
+        );
         this.resourceLoaded = true;
       })
   }

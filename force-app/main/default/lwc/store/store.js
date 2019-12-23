@@ -1,30 +1,23 @@
-/* eslint-disable no-unused-vars */
 let stores = {};
 
-export function initStore(testStore, reducers, {
+export function initStore(reducer, {
   storeKey = 'defaultRedux',
 } = {}) {
-  if (testStore) {
-    stores[storeKey] = {
-      ...testStore
-    }
-  } else {
-    const {
-      createStore,
-      applyMiddleware,
-      combineReducers
-    } = window.Redux;
-    const ReduxThunk = window.ReduxThunk.default;
+  const {
+    createStore,
+    applyMiddleware,
+    combineReducers
+  } = window.Redux;
+  const ReduxThunk = window.ReduxThunk.default;
 
-    const rootReducer = typeof reducers === 'function' ?
-      reducers :
-      combineReducers(reducers);
+  const rootReducer = typeof reducer === 'function' ?
+    reducer :
+    combineReducers(reducer);
 
-    stores[storeKey] = createStore(
-      rootReducer,
-      applyMiddleware(ReduxThunk)
-    );
-  }
+  stores[storeKey] = createStore(
+    rootReducer,
+    applyMiddleware(ReduxThunk)
+  );
 }
 
 export function getStore(keyName = 'defaultRedux') {
