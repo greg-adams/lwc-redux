@@ -9,7 +9,8 @@
     "@lwc/synthetic-shadow": "^1.1.1",
     "@salesforce/sfdx-lwc-jest": "^0.6.2",
     "jest": "^24.9.0",
-    "redux": "^4.0.4"
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
