@@ -3,8 +3,7 @@ import { clearDOM, flushPromises } from 'c/testUtils';
 import ActiveList from 'c/activeList';
 import Provider from 'c/provider';
 
-import { actions } from 'c/exampleAppService';
-import { createStore } from 'redux';
+import { actions, reducer } from 'c/exampleAppService';
 
 jest.mock(
   'lightning/platformResourceLoader',
@@ -12,8 +11,8 @@ jest.mock(
     return {
       loadScript() {
         return new Promise((resolve) => {
-          global.Redux = require('../../../staticresources/redux');
-          global.ReduxThunk = require('../../../staticresources/reduxThunk');
+          global.Redux = require('redux');
+          global.ReduxThunk = require('redux-thunk');
           resolve();
         });
       }
@@ -22,14 +21,9 @@ jest.mock(
   { virtual: true }
 );
 
-const initialState = {
-  ui: {
-    contacts: [],
-  }
-}
-
 jest.mock('c/exampleAppService', () => {
   return {
+    reducer: jest.requireActual('c/exampleAppService').reducer,
     actions: {
       addNewContact: jest.fn(() => ({ type: null }))
     }
@@ -42,9 +36,8 @@ describe('c-active-list', () => {
   });
 
   it('correctly calls action creator', () => {
-    const testStore = createStore(() => ({ ...initialState }));
     const provider = createElement('c-provider', { is: Provider });
-    provider.store = testStore;
+    provider.reducer = reducer;
     document.body.appendChild(provider);
 
     const aList = createElement('c-active-list', { is: ActiveList });
@@ -60,9 +53,8 @@ describe('c-active-list', () => {
   });
 
   it('correctly handles non-store behavior', () => {
-    const testStore = createStore(() => ({ ...initialState }));
     const provider = createElement('c-provider', { is: Provider });
-    provider.store = testStore;
+    provider.reducer = reducer;
     document.body.appendChild(provider);
 
     const HEADER = 'My Header';
@@ -79,11 +71,10 @@ describe('c-active-list', () => {
   });
 
 
-  // Redux only injects values, so we should test component for rendering behavior
+  // Store values are only injected, so we should test component itself for rendering behavior
   it('correctly handles rendering store values', () => {
-    const testStore = createStore(() => ({ ...initialState }));
     const provider = createElement('c-provider', { is: Provider });
-    provider.store = testStore;
+    provider.reducer = reducer;
     document.body.appendChild(provider);
 
     const aList = createElement('c-active-list', { is: ActiveList });

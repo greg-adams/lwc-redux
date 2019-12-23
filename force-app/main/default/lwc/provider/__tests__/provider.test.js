@@ -44,7 +44,6 @@ describe('c-provider', () => {
     return flushPromises()
       .then(() => {
         expect(initStore).toHaveBeenCalledWith(
-          null,
           REDUCER,
           expect.objectContaining({
             storeKey: KEY

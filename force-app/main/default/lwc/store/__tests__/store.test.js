@@ -1,14 +1,13 @@
 import { clearDOM } from 'c/testUtils';
-import { createStore } from 'redux';
 
 describe('c-store', () => {
-  let storeLib;
+  let store;
 
   beforeEach(() => {
-    storeLib = require('c/store');
+    store = require('c/store');
 
-    global.Redux = require('../../../staticresources/redux');
-    global.ReduxThunk = require('../../../staticresources/reduxThunk');
+    global.Redux = require('redux');
+    global.ReduxThunk = require('redux-thunk');
   });
 
   afterEach(() => {
@@ -17,44 +16,34 @@ describe('c-store', () => {
   });
 
   it('Initializes single store', () => {
-    storeLib.initStore(
-      null,
-      () => (['a', 'b'])
-    );
+    store.initStore(() => (['a', 'b']));
 
     // Store-like values
-    expect(storeLib.getStore().getState()).toEqual(['a', 'b']);
+    expect(store.getStore().getState()).toEqual(['a', 'b']);
   });
 
   it('Initializes provided store', () => {
-    const testStore = createStore(() => ([1, 2, 3]));
+    store.initStore(() => ([1, 2]));
 
-    storeLib.initStore(
-      testStore,
-      null
-    );
-
-    expect(storeLib.getStore().getState()).toEqual(testStore.getState());
+    expect(store.getStore().getState()).toEqual([1, 2]);
   });
 
   it('Initializes multiple stores', () => {
-    storeLib.initStore(
-      null,
+    store.initStore(
       () => ({}),
       {
         storeKey: 'store1'
       }
     );
 
-    storeLib.initStore(
-      null,
+    store.initStore(
       () => ({}),
       {
         storeKey: 'store2'
       }
     );
 
-    expect(storeLib.getStore('store1') !== storeLib.getStore('store2')).toBe(true)
+    expect(store.getStore('store1') !== store.getStore('store2')).toBe(true)
   });
 
 });
