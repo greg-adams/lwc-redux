@@ -1,7 +1,6 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import { ConnectMixin } from 'c/connect';
 import { actions } from 'c/exampleAppService';
-
 
 const mapState = (state) => {
   return {
@@ -16,7 +15,9 @@ const mapDispatch = (dispatch) => {
 }
 
 class TodoList extends LightningElement {
-  @track contacts = [];
+  @api contacts = [];
+
+  @api addNewContact = () => { };
 
 
 }

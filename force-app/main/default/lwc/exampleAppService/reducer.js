@@ -1,4 +1,5 @@
 export const initialState = {
+  header: 'My App',
   contacts: [
     {
       id: '1',

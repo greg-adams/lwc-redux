@@ -1,34 +1,7 @@
 import { createElement } from 'lwc';
 import { clearDOM, flushPromises } from 'c/testUtils';
 import ActiveList from 'c/activeList';
-import Provider from 'c/provider';
-
 import { actions, reducer } from 'c/exampleAppService';
-
-jest.mock(
-  'lightning/platformResourceLoader',
-  () => {
-    return {
-      loadScript() {
-        return new Promise((resolve) => {
-          global.Redux = require('redux');
-          global.ReduxThunk = require('redux-thunk');
-          resolve();
-        });
-      }
-    };
-  },
-  { virtual: true }
-);
-
-jest.mock('c/exampleAppService', () => {
-  return {
-    reducer: jest.requireActual('c/exampleAppService').reducer,
-    actions: {
-      addNewContact: jest.fn(() => ({ type: null }))
-    }
-  }
-});
 
 describe('c-active-list', () => {
   afterEach(() => {
@@ -36,62 +9,39 @@ describe('c-active-list', () => {
   });
 
   it('correctly calls action creator', () => {
-    const provider = createElement('c-provider', { is: Provider });
-    provider.reducer = reducer;
-    document.body.appendChild(provider);
+    const handler = jest.fn();
 
-    const aList = createElement('c-active-list', { is: ActiveList });
-    return flushPromises()
-      .then(() => provider.appendChild(aList))
+    const element = createElement('c-active-list', { is: ActiveList });
+    element.addNewContact = handler;
+
+    document.body.appendChild(element);
+    return Promise.resolve()
       .then(() => {
-        aList.shadowRoot.querySelector('[data-add-id]').click();
-      })
-      .then(() => {
+        element.shadowRoot.querySelector('[data-add-id]').click();
+
         // Test action creator individually
-        expect(actions.addNewContact).toHaveBeenCalled();
-      })
-  });
-
-  it('correctly handles non-store behavior', () => {
-    const provider = createElement('c-provider', { is: Provider });
-    provider.reducer = reducer;
-    document.body.appendChild(provider);
-
-    const HEADER = 'My Header';
-
-    const aList = createElement('c-active-list', { is: ActiveList });
-    aList.name = HEADER;
-
-    return flushPromises()
-      .then(() => provider.appendChild(aList))
-      .then(() => {
-        const header = aList.shadowRoot.querySelector('[data-header-id]');
-        expect(header.textContent).toEqual(HEADER);
+        expect(handler).toHaveBeenCalled();
       })
   });
 
 
   // Store values are only injected, so we should test component itself for rendering behavior
   it('correctly handles rendering store values', () => {
-    const provider = createElement('c-provider', { is: Provider });
-    provider.reducer = reducer;
-    document.body.appendChild(provider);
+    const CONTACTS = [
+      {
+        name: 'Test',
+        id: '1',
+      }
+    ];
 
-    const aList = createElement('c-active-list', { is: ActiveList });
+    const element = createElement('c-active-list', { is: ActiveList });
+    element.contacts = CONTACTS;
 
-    return flushPromises()
-      .then(() => provider.appendChild(aList))
+    document.body.appendChild(element);
+    return Promise.resolve()
       .then(() => {
-        aList.contacts = [
-          {
-            name: 'Test',
-            id: '1',
-          }
-        ];
-      })
-      .then(() => {
-        const items = aList.shadowRoot.querySelectorAll('li');
-        expect(items.length).toEqual(1);
+        const items = element.shadowRoot.querySelectorAll('li');
+        expect(items.length).toEqual(CONTACTS.length);
       })
   });
 
