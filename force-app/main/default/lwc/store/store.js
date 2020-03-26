@@ -14,10 +14,13 @@ export function initStore(reducer, {
     reducer :
     combineReducers(reducer);
 
-  stores[storeKey] = createStore(
-    rootReducer,
-    applyMiddleware(ReduxThunk)
-  );
+  // eslint-disable-next-line no-undef
+  if (!stores.hasOwnProperty(storeKey) || process.env.NODE_ENV !== 'production') {
+    stores[storeKey] = createStore(
+      rootReducer,
+      applyMiddleware(ReduxThunk)
+    );
+  }
 }
 
 export function getStore(keyName = 'defaultRedux') {

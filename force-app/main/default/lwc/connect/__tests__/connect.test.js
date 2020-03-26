@@ -88,7 +88,7 @@ describe('c-connect', () => {
       testAction: jest.fn(() => ({ type: 'ADD_RECORD' })),
     };
 
-    const TestComponent = ConnectMixin(mapState, mapDispatch)(Component);
+    const TestComponent = ConnectMixin(mapState, mapDispatch, null, { runForTest: true })(Component);
     const testCmpEl = createElement('c-test-component', { is: TestComponent });
 
     return flushPromises()
@@ -118,7 +118,7 @@ describe('c-connect', () => {
       }
     });
 
-    const TestComponent = ConnectMixin(mapState, null)(Component);
+    const TestComponent = ConnectMixin(mapState, null, null, { runForTest: true })(Component);
     const testCmpEl = createElement('c-test-component', { is: TestComponent });
 
     return flushPromises()
@@ -149,7 +149,7 @@ describe('c-connect', () => {
       testAction: jest.fn(),
     };
 
-    const TestComponent = ConnectMixin(null, mapDispatch)(Component);
+    const TestComponent = ConnectMixin(null, mapDispatch, null, { runForTest: true })(Component);
     const testCmpEl = createElement('c-test-component', { is: TestComponent });
 
     return flushPromises()
@@ -177,7 +177,7 @@ describe('c-connect', () => {
       testAction: jest.fn(() => ({ type: 'TEST_ACTION' })),
     };
 
-    const TestComponent = ConnectMixin(null, mapDispatch)(Component);
+    const TestComponent = ConnectMixin(null, mapDispatch, null, { runForTest: true })(Component);
     const testCmpEl = createElement('c-test-component', { is: TestComponent });
     return flushPromises()
       .then(() => provider.appendChild(testCmpEl))
@@ -201,7 +201,7 @@ describe('c-connect', () => {
       }
     })
 
-    const TestComponent = ConnectMixin(mapState, null)(Component);
+    const TestComponent = ConnectMixin(mapState, null, null, { runForTest: true })(Component);
     const testCmpEl = createElement('c-test-component', { is: TestComponent });
 
     let unSubscribeSpy = jest.fn();
@@ -242,7 +242,7 @@ describe('c-connect', () => {
       }
     })
 
-    const TestComponent = ConnectMixin(mapState, null)(Component);
+    const TestComponent = ConnectMixin(mapState, null, null, { runForTest: true })(Component);
     const testCmpEl = createElement('c-test-component', { is: TestComponent });
 
     return flushPromises()
@@ -263,7 +263,7 @@ describe('c-connect', () => {
 
     const mapState = jest.fn((state) => ({ records: state.records }));
 
-    const TestComponent = ConnectMixin(mapState, null)(Component);
+    const TestComponent = ConnectMixin(mapState, null, null, { runForTest: true })(Component);
     const testCmpEl = createElement('c-test-component', { is: TestComponent });
 
     document.body.appendChild(testCmpEl);

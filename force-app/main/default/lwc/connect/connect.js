@@ -77,10 +77,15 @@ function connect(
   }
 }
 
-export const ConnectMixin = (mapState = null, mapDispatch = null) => Base => {
+export const ConnectMixin = (mapState = null, mapDispatch = null, storeKey, { runForTest = false } = {}) => Base => {
+  // eslint-disable-next-line no-undef
+  if (!runForTest && process.env.NODE_ENV === 'test') {
+    return Base;
+  }
+
   return class extends Base {
     connectedCallback() {
-      connect(mapState, mapDispatch)(this);
+      connect(mapState, mapDispatch, storeKey)(this);
       if (super.connectedCallback) {
         super.connectedCallback();
       }
