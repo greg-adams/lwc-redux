@@ -3,7 +3,7 @@
 ## Components
 
 -   Closely follows React-Redux library with few modifications for LWC/SFDC platform:
-    -   `Provider` - Wraps app at top-level to ensure Redux is loaded via static resources and store is initialized. Needs to be given the reducer (or an object that can be passed to the Redux `combinedReducers` helper function).
+    -   `Provider` - Wraps app at top-level to ensure Redux is loaded via static resources and store is initialized. Needs to be given the reducer (or an object that can be passed to the Redux `combineReducers` helper function).
     -   `Store` - Holds the store, and allows access to the store outside of a component using `getStore()`.
         -   `ConnectMixin` - Subscribes component to Redux store, binds action creators, and applies store updates.
         -   `initStore(reducer, { storeKey })` - Creates store with reducer after static resource is loaded.
