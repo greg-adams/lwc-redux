@@ -1,13 +1,13 @@
 const { jestConfig } = require('@salesforce/sfdx-lwc-jest/config');
 
+const setupFilesAfterEnv = jestConfig.setupFilesAfterEnv || [];
+setupFilesAfterEnv.push('./jest.setup.js');
+
 module.exports = {
   ...jestConfig,
-  "preset": "@lwc/jest-preset",
-  "moduleNameMapper": {
-    "^(c)/(.+)$": "<rootDir>/force-app/main/default/lwc/$2/$2"
-  },
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
   ],
-  clearMocks: true
+  clearMocks: true,
+  testMatch: ['**/__tests__/**/?(*.)+(test).js']
 }

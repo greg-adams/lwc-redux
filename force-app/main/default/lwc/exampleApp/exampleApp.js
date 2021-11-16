@@ -2,16 +2,15 @@ import { LightningElement, track } from 'lwc';
 import { reducer } from 'c/exampleAppService';
 
 export default class ExampleApp extends LightningElement {
-  reducer = reducer;
+    reducer = reducer;
 
+    @track showActive = true;
 
-  @track showActive = true;
+    disconnect() {
+        this.showActive = false;
+    }
 
-  disconnect() {
-    this.showActive = false;
-  }
-
-  reconnect() {
-    this.showActive = true;
-  }
+    reconnect() {
+        this.showActive = true;
+    }
 }

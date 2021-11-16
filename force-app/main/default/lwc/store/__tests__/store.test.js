@@ -1,49 +1,60 @@
 import { clearDOM } from 'c/testUtils';
 
-describe('c-store', () => {
-  let store;
+jest.mock(
+    'lightning/platformResourceLoader',
+    () => {
+        return {
+            loadScript: jest.fn()
+        };
+    },
+    { virtual: true }
+);
 
-  beforeEach(() => {
-    store = require('c/store');
-
+beforeAll(() => {
     global.Redux = require('redux');
     global.ReduxThunk = require('redux-thunk');
-  });
+});
 
-  afterEach(() => {
-    clearDOM();
-    jest.resetModules(); // clear "c/store"
-  });
+describe('c-store', () => {
+    let store;
 
-  it('Initializes single store', () => {
-    store.initStore(() => (['a', 'b']));
+    beforeEach(() => {
+        store = jest.requireActual('c/store');
+    });
 
-    // Store-like values
-    expect(store.getStore().getState()).toEqual(['a', 'b']);
-  });
+    afterEach(() => {
+        clearDOM();
+        jest.resetModules(); // clear "c/store"
+    });
 
-  it('Initializes provided store', () => {
-    store.initStore(() => ([1, 2]));
+    it('Initializes single store', () => {
+        store.initStore(() => ['value']);
 
-    expect(store.getStore().getState()).toEqual([1, 2]);
-  });
+        // Store-like values
+        expect(store.getStore().getState()).toEqual(['value']);
+    });
 
-  it('Initializes multiple stores', () => {
-    store.initStore(
-      () => ({}),
-      {
-        storeKey: 'store1'
-      }
-    );
+    it('Initializes multiple stores', () => {
+        store.initStore(() => ({}), {
+            storeKey: 'store1'
+        });
 
-    store.initStore(
-      () => ({}),
-      {
-        storeKey: 'store2'
-      }
-    );
+        store.initStore(() => ({}), {
+            storeKey: 'store2'
+        });
 
-    expect(store.getStore('store1') !== store.getStore('store2')).toBe(true)
-  });
+        expect(store.getStore('store1') !== store.getStore('store2')).toBe(true);
+    });
 
+    it('Initializes store correctly if provided sliced store reducers', () => {
+        store.initStore({
+            slice1: () => ({}),
+            slice2: () => ({})
+        });
+
+        expect(store.getStore().getState()).toEqual({
+            slice1: {},
+            slice2: {}
+        });
+    });
 });

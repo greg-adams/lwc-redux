@@ -1,24 +1,23 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement } from 'lwc';
 import { ConnectMixin } from 'c/connect';
 import { actions } from 'c/exampleAppService';
 
-const mapState = (state) => {
-  return {
-    contacts: state.ui.contacts
-  }
-}
+const mapState = state => {
+    return {
+        contacts: state.ui.contacts
+    };
+};
 
-const mapDispatch = (dispatch) => {
-  return {
-    addNewContact: () => dispatch(actions.addNewContact(Math.ceil(Math.random() * 1000)))
-  }
-}
+const mapDispatch = dispatch => {
+    return {
+        addNewContact: () => dispatch(actions.addNewContact(Math.ceil(Math.random() * 1000)))
+    };
+};
 
 class TodoList extends LightningElement {
-  @api contacts = [];
+  contacts = [];
 
-  @api addNewContact = () => { };
-
+  addNewContact = () => { };
 
 }
 

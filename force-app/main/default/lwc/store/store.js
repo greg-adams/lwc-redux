@@ -1,33 +1,12 @@
-let stores = {};
+import { ConnectMixin } from './connectMixin';
+import { getStore, initStore } from './storeSetup';
 
-export function initStore(reducer, {
-  storeKey = 'defaultRedux',
-} = {}) {
-  const {
-    createStore,
-    applyMiddleware,
-    combineReducers
-  } = window.Redux;
-  const ReduxThunk = window.ReduxThunk.default;
+export { getStore, initStore } from './storeSetup';
 
-  const rootReducer = typeof reducer === 'function' ?
-    reducer :
-    combineReducers(reducer);
-
-  // eslint-disable-next-line no-undef
-  if (!stores.hasOwnProperty(storeKey) || process.env.NODE_ENV !== 'production') {
-    stores[storeKey] = createStore(
-      rootReducer,
-      applyMiddleware(ReduxThunk)
-    );
-  }
-}
-
-export function getStore(keyName = 'defaultRedux') {
-  return stores[keyName] || null;
-}
+export { ConnectMixin } from './connectMixin';
 
 export default {
-  initStore,
-  getStore
-}
+    initStore,
+    getStore,
+    ConnectMixin
+};

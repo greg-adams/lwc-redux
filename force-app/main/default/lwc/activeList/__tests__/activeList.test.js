@@ -1,48 +1,89 @@
 import { createElement } from 'lwc';
-import { clearDOM, flushPromises } from 'c/testUtils';
+import { clearDOM } from 'c/testUtils';
 import ActiveList from 'c/activeList';
-import { actions, reducer } from 'c/exampleAppService';
+import { emitStore } from 'c/store';
+import { actions } from 'c/exampleAppService';
+
+jest.mock('c/exampleAppService', () => {
+    return {
+        actions: {
+            addNewContact: jest.fn()
+        }
+    };
+});
+
+afterEach(() => {
+    clearDOM();
+});
 
 describe('c-active-list', () => {
-  afterEach(() => {
-    clearDOM();
-  });
+    it('correctly calls action creator', () => {
+        const STATE = {
+            ui: {
+                header: '',
+                contacts: [
+                    {
+                        name: 'Test',
+                        id: '1',
+                    }
+                ]
+            }
+        };
 
-  it('correctly calls action creator', () => {
-    const handler = jest.fn();
+        emitStore(STATE);
 
-    const element = createElement('c-active-list', { is: ActiveList });
-    element.addNewContact = handler;
+        const element = createElement('c-active-list', { is: ActiveList });
 
-    document.body.appendChild(element);
-    return Promise.resolve()
-      .then(() => {
-        element.shadowRoot.querySelector('[data-add-id]').click();
+        document.body.appendChild(element);
 
-        // Test action creator individually
-        expect(handler).toHaveBeenCalled();
-      })
-  });
+        return Promise.resolve()
+            .then(() => {
+                element.shadowRoot.querySelector('[data-add-id]').click();
+
+                // Test action creator individually
+                expect(actions.addNewContact).toHaveBeenCalled();
+            });
+    });
 
 
-  // Store values are only injected, so we should test component itself for rendering behavior
-  it('correctly handles rendering store values', () => {
-    const CONTACTS = [
-      {
-        name: 'Test',
-        id: '1',
-      }
-    ];
+    // Store values are only injected, so we should test component itself for rendering behavior
+    it('correctly handles rendering store values', () => {
+        const STATE = {
+            ui: {
+                header: '',
+                contacts: [
+                    {
+                        name: 'Test',
+                        id: '1',
+                    }
+                ]
+            }
+        };
 
-    const element = createElement('c-active-list', { is: ActiveList });
-    element.contacts = CONTACTS;
+        emitStore(STATE);
 
-    document.body.appendChild(element);
-    return Promise.resolve()
-      .then(() => {
-        const items = element.shadowRoot.querySelectorAll('li');
-        expect(items.length).toEqual(CONTACTS.length);
-      })
-  });
+        const element = createElement('c-active-list', { is: ActiveList });
+
+        document.body.appendChild(element);
+
+        return Promise.resolve()
+            .then(() => {
+                const items = element.shadowRoot.querySelectorAll('li');
+
+                expect(items.length).toEqual(STATE.ui.contacts.length);
+
+                STATE.ui.contacts = STATE.ui.contacts.concat({
+                    name: 'test2',
+                    id: '2'
+                });
+
+                emitStore(STATE);
+            })
+            .then(() => {
+                const items = element.shadowRoot.querySelectorAll('li');
+
+                expect(items.length).toEqual(STATE.ui.contacts.length);
+            });
+    });
 
 });
