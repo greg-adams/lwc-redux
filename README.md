@@ -94,15 +94,20 @@ emitStore({
     records: [1, 2, 3]
 });
 
-const activeList = createElement('c-active-list', { is: ActiveList });
-return Promise.resolve().then(() => {
-    const items = activeList.shadowRoot.querySelectorAll('li');
-    expect(items.length).toEqual(3);
-});
-```
+const element = createElement('c-active-list', { is: ActiveList });
+return Promise.resolve()
+    .then(() => {
+        const items = element.shadowRoot.querySelectorAll('li');
+        expect(items.length).toEqual(3);
 
-```
-export default ConnectMixin(mapState, mapDispatch, 'storeName')
+        emitStore({
+            records: [1, 2]
+        });
+    })
+    .then(() => {
+        const items = element.shadowRoot.querySelectorAll('li');
+        expect(items.length).toEqual(2);
+    });
 ```
 
 Test action creators/reducers separately.
