@@ -1,6 +1,6 @@
 import { createElement, api, LightningElement } from 'lwc';
 import { clearDOM } from 'c/testUtils';
-import { ConnectMixin } from '../connectMixin';
+import { ConnectMixin } from '../connect';
 
 const baseDisconnected = jest.fn();
 const baseConnected = jest.fn();
