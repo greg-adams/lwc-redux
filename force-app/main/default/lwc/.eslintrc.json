@@ -1,3 +1,78 @@
 {
-  "extends": ["@salesforce/eslint-config-lwc/recommended"]
+  "env": {
+      "browser": true,
+      "commonjs": true,
+      "es6": true,
+      "node": true
+  },
+  "extends": ["@salesforce/eslint-config-lwc/recommended", "prettier"],
+  "globals": {
+      "$A": true
+  },
+  "parserOptions": {
+      "ecmaVersion": 7,
+      "sourceType": "module"
+  },
+  "rules": {
+      "arrow-spacing": 2,
+      "arrow-parens": ["error", "as-needed"],
+      "no-console": [
+          "error",
+          {
+              "allow": ["info", "warn", "error"]
+          }
+      ],
+      "indent": ["warn", 4, { "SwitchCase": 1 }],
+      "no-param-reassign": ["error"],
+      "padding-line-between-statements": [
+          "error",
+          {
+              "blankLine": "always",
+              "prev": ["const", "let", "var"],
+              "next": "*"
+          },  
+          {
+              "blankLine": "any",
+              "prev": ["const", "let", "var"],
+              "next": ["const", "let", "var"]
+          }
+      ],
+      "quotes": ["error", "single"],
+      "semi": ["error", "always"],
+      "space-before-function-paren": [
+          "error",
+          {
+              "anonymous": "always",
+              "named": "never",
+              "asyncArrow": "always"
+          }
+      ],
+      "key-spacing": [
+          "error",
+          {
+              "afterColon": true
+          }
+      ],
+      "keyword-spacing": [
+          "error",
+          {
+              "before": true,
+              "after": true
+          }
+      ],
+      "space-before-blocks": ["error", "always"],
+      "space-infix-ops": "error",
+      "no-trailing-spaces": 2,
+      "newline-before-return": "error",
+      "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+      "eol-last": ["error", "always"]
+  },
+  "overrides": [
+      {
+          "files": ["*.test.js"],
+          "rules": {
+              "@lwc/lwc/no-unexpected-wire-adapter-usages": "off"
+          }
+      }
+  ]
 }
